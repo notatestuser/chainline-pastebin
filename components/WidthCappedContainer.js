@@ -6,7 +6,7 @@ export const WidthCappedContainer = styled.div`
   flex-direction: ${props => props.direction || 'column'};
   justify-content: ${props => props.justify || 'normal'};
   margin: auto;
-  max-width: 1152px;
+  max-width: 1000px;
   width: 100%;
 `;
 
