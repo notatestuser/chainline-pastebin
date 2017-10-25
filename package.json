@@ -1,0 +1,28 @@
+{
+  "name": "chainline-pastebin",
+  "description": "A pastebin that hashes and verifies uploaded content",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "grommet": ">= 2.0.0-alpha.0 < 3.0.0",
+    "grommet-icons": "^0.10.1",
+    "next": "latest",
+    "react-dom": "^16.0.0",
+    "react": "^16.0.0",
+    "styled-components": "^2.2.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0"
+  }
+}
