@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { Grommet, Responsive, Box, Heading } from 'grommet';
-import { AddCircle, View } from 'grommet-icons';
 import styled from 'styled-components';
+import { AddCircle, FingerPrint } from 'grommet-icons';
+import { Grommet, Responsive, Box, Heading, Text } from 'grommet';
 
 import { WidthCappedContainer } from './WidthCappedContainer';
 
@@ -18,10 +18,8 @@ const PlainAnchor = styled.a`
   text-decoration: none;
 `;
 
-const BoldAnchor = styled.a`
-  cursor: pointer;
+const BoldAnchor = styled(PlainAnchor)`
   font-weight: bold;
-  text-decoration: none;
 `;
 
 class Layout extends Component {
@@ -42,69 +40,95 @@ class Layout extends Component {
     const { responsiveState } = this.state;
 
     return ([
-      <Head>
+      <Head key='Head'>
         <title>{ title || 'Chain Line Pastebin' }</title>
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
         <meta name='mobile-web-app-capable' content='yes' />
         <style>
           {'html, body, #content { height: 100%; }'}
-          {'body { margin: 0; }'}
+          {'body { margin: 0; background: #444444; }'}
         </style>
       </Head>,
-      <Grommet>
+      <Grommet key='Grommet'>
         <Responsive onChange={this.onResponsiveChange}>
           <header>
-            <Box background={{ dark: true, image: '#69B8D6' }}>
-              <Box
-                background={{ dark: true }}
-                direction='row'
-                justify='end'
-                align='center'
-                pad={{ vertical: 'none', horizontal: 'large' }}
-              >
-                <WidthCappedContainer justify='space-between' direction='row'>
-                  {responsiveState === 'wide' &&
-                  <Heading>
-                    <Link href='/'>
-                      <PlainAnchor>
-                        Pastebin
-                      </PlainAnchor>
-                    </Link>
-                  </Heading>}
-                  <FlexNav>
-                    <Box align='center' direction='row'>
-                      <Box align='start' direction='row' pad='small' margin={{ right: 'medium' }}>
-                        <Box margin={{ right: 'small' }}>
-                          <Link href='/create'>
-                            <BoldAnchor>
-                              Create
-                            </BoldAnchor>
-                          </Link>
-                        </Box>
-                        <AddCircle />
+            <Box
+              background={{ dark: true, image: '#69B8D6' }}
+              direction='row'
+              justify='end'
+              align='center'
+              pad={{ vertical: 'none', horizontal: 'large' }}
+            >
+              <WidthCappedContainer justify='space-between' direction='row'>
+                {responsiveState === 'wide' &&
+                <Heading>
+                  <Link href='/'>
+                    <PlainAnchor>
+                      Pastebin
+                    </PlainAnchor>
+                  </Link>
+                </Heading>}
+                <FlexNav>
+                  <Box align='center' direction='row'>
+                    <Box align='start' direction='row' pad='small' margin={{ right: 'medium' }}>
+                      <Box margin={{ right: 'small' }}>
+                        <Link href='/create'>
+                          <BoldAnchor>
+                            Create
+                          </BoldAnchor>
+                        </Link>
                       </Box>
-                      <Box align='start' direction='row' pad='small'>
-                        <Box margin={{ right: 'small' }}>
-                          <Link href='/browse'>
-                            <BoldAnchor>
-                              Browse
-                            </BoldAnchor>
-                          </Link>
-                        </Box>
-                        <View />
-                      </Box>
+                      <AddCircle />
                     </Box>
-                  </FlexNav>
-                </WidthCappedContainer>
-              </Box>
+                    <Box align='start' direction='row' pad='small'>
+                      <Box margin={{ right: 'small' }}>
+                        <Link href='/verify'>
+                          <BoldAnchor>
+                            Verify
+                          </BoldAnchor>
+                        </Link>
+                      </Box>
+                      <FingerPrint />
+                    </Box>
+                  </Box>
+                </FlexNav>
+              </WidthCappedContainer>
             </Box>
           </header>
         </Responsive>
 
-        <Box pad='large'>
-          { children }
-        </Box>
+        <main>
+          <Box pad='large' margin={{ bottom: 'large' }}>
+            <WidthCappedContainer>
+              { children }
+            </WidthCappedContainer>
+          </Box>
+        </main>
+
+        <footer>
+          <Box
+            background='#444444'
+            direction='column'
+            justify='start'
+            margin='none'
+          >
+            <Box
+              direction='row'
+              align='start'
+              pad={{ horizontal: 'none', vertical: 'medium' }}
+              justify='between'
+              margin={{ horizontal: 'large' }}
+            >
+              <WidthCappedContainer size='xlarge' direction='row' justify='space-between'>
+                <Text margin='none'>
+                  © 2017 Luke Plaster.&nbsp;
+                  MIT Licensed.
+                </Text>
+              </WidthCappedContainer>
+            </Box>
+          </Box>
+        </footer>
 
       </Grommet>,
     ]);
