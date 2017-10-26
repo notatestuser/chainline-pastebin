@@ -30,8 +30,8 @@ app
         if (id.length < 3 || id.length > 32) {
           throw new Error('The given id appears to be invalid');
         }
-        const data = await pastebin.getPaste(id);
-        res.json({ ok: true, data });
+        const text = await pastebin.getPaste(id);
+        res.json({ ok: true, text });
       } catch (err) {
         res.status(404).json({
           ok: false,
@@ -44,7 +44,7 @@ app
       try {
         const {
           text, title, privacy, expiry,
-        } = pick(req.body, '!nes::text', '!nes::title', '!num::privacy', '!nes::expiry');
+        } = pick(req.body, '!nes::title', '!nes::text', '!num::privacy', '!nes::expiry');
         const url = await pastebin.createPaste({
           text, title, privacy, expiration: expiry, format: 'text',
         });

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { Box, Heading, Button, TextInput, Select, CheckBox, RadioButton } from 'grommet';
+import { Box, Heading, Text, Button, TextInput, Select, CheckBox, RadioButton, RoutedAnchor } from 'grommet';
 
 import Layout from '../components/layout';
 import Field from '../components/Field';
+import NotifyLayer from '../components/NotifyLayer';
+
+import { createPaste } from '../utils/api';
+import { getVerifyHash } from '../utils/hash';
 
 const EXPIRY_OPTIONS = {
   '10 minutes': '10M',
@@ -27,7 +31,9 @@ const BorderlessTextarea = styled.textarea`
   }
 `;
 
-const onSubmit = async ({ selectedExpiry, expireNever, unlisted }) => {
+const onSubmit = async (comp) => {
+  const { selectedExpiry, expireNever, unlisted } = comp.state;
+
   const form = document.forms['create-form'];
   const inputs = form.getElementsByTagName('input');
   const textareas = form.getElementsByTagName('textarea');
@@ -35,27 +41,45 @@ const onSubmit = async ({ selectedExpiry, expireNever, unlisted }) => {
   const [contentTextArea] = textareas;
   const title = titleInput.value;
   const text = contentTextArea.value || contentTextArea.textContent;
-  const body = {
+
+  const postBody = {
     title,
     text,
     privacy: unlisted === true ? 1 : 0,
     expiry: expireNever ? 'N' : EXPIRY_OPTIONS[selectedExpiry],
   };
+
   try {
-    const response = await fetch('/api/paste', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+    const id = await createPaste(postBody);
+    const hash = getVerifyHash(text);
+    comp.setState({
+      loading: false,
+      notifySuccess: true,
+      notifyMessage: (
+        <Text>
+          <Heading level={3} margin={{ top: 'none' }}>
+            Your paste has been created!
+          </Heading>
+          Verify code:<br />
+          <TextInput plain={true} disabled={true} value={hash} />
+          Use this link to share your paste:<br />
+          <Box margin={{ top: 'small' }}>
+            <RoutedAnchor primary={true} path={`/paste/${id}`} label={id} />
+          </Box>
+        </Text>),
     });
-    const { id } = await response.json();
-    alert(id);
   } catch (err) {
-    alert('An error occurred!');
+    comp.setState({
+      loading: false,
+      notifySuccess: false,
+      notifyMessage: <Text>{err && err.message}</Text>,
+    });
   }
 };
 
 class CreateForm extends Component {
   state = {
+    loading: false,
     unlisted: true,
     expireSelect: true,
     expireNever: false,
@@ -63,13 +87,21 @@ class CreateForm extends Component {
   }
 
   render() {
+    const { notifyMessage, notifySuccess, loading } = this.state;
     return (
       <Layout>
+        <NotifyLayer
+          message={notifyMessage}
+          isSuccess={notifySuccess}
+          onClose={() => { this.setState({ notifyMessage: null }); }}
+        />
         <form
           name='create-form'
           onSubmit={async (ev) => {
             ev.preventDefault();
-            onSubmit(this.state);
+            if (loading) return false;
+            onSubmit(this);
+            this.setState({ loading: true });
             return false;
           }}
         >
@@ -136,7 +168,12 @@ class CreateForm extends Component {
                 </Box>
               </Field>
               <Box margin={{ top: 'large' }}>
-                <Button primary={true} type='submit' label='Submit' />
+                <Button
+                  type={loading ? 'disabled' : 'submit'}
+                  label='Submit'
+                  primary={true}
+                  disabled={loading}
+                />
               </Box>
             </Box>
           </Box>
