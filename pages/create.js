@@ -7,13 +7,12 @@ import Layout from '../components/layout';
 import Field from '../components/Field';
 
 const EXPIRY_OPTIONS = {
+  '10 minutes': '10M',
   '1 hour': '1H',
   '1 day': '1D',
   '1 week': '1W',
+  '2 weeks': '2W',
   '1 month': '1M',
-  '3 months': '3M',
-  '6 months': '6M',
-  '1 year': '1Y',
 };
 
 const BorderlessTextarea = styled.textarea`
@@ -28,9 +27,36 @@ const BorderlessTextarea = styled.textarea`
   }
 `;
 
+const onSubmit = async ({ selectedExpiry, expireNever, unlisted }) => {
+  const form = document.forms['create-form'];
+  const inputs = form.getElementsByTagName('input');
+  const textareas = form.getElementsByTagName('textarea');
+  const [titleInput] = inputs;
+  const [contentTextArea] = textareas;
+  const title = titleInput.value;
+  const text = contentTextArea.value || contentTextArea.textContent;
+  const body = {
+    title,
+    text,
+    privacy: unlisted === true ? 1 : 0,
+    expiry: expireNever ? 'N' : EXPIRY_OPTIONS[selectedExpiry],
+  };
+  try {
+    const response = await fetch('/api/paste', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const { id } = await response.json();
+    alert(id);
+  } catch (err) {
+    alert('An error occurred!');
+  }
+};
+
 class CreateForm extends Component {
   state = {
-    private: true,
+    unlisted: true,
     expireSelect: true,
     expireNever: false,
     selectedExpiry: '1 day',
@@ -41,17 +67,9 @@ class CreateForm extends Component {
       <Layout>
         <form
           name='create-form'
-          onSubmit={(ev) => {
+          onSubmit={async (ev) => {
             ev.preventDefault();
-            const form = document.forms['create-form'];
-            const inputs = form.getElementsByTagName('input');
-            const textareas = form.getElementsByTagName('textarea');
-            const [titleInput] = inputs;
-            const [contentTextArea] = textareas;
-            const title = titleInput.value;
-            const content = contentTextArea.value || contentTextArea.textContent;
-            alert(title);
-            alert(content);
+            onSubmit(this.state);
             return false;
           }}
         >
@@ -110,9 +128,9 @@ class CreateForm extends Component {
                 <Box pad='small' margin={{ bottom: 'small' }}>
                   <CheckBox
                     label='Do not list on Pastebin.com'
-                    checked={this.state.private}
+                    checked={this.state.unlisted}
                     onChange={() => {
-                      this.setState({ private: !this.state.private });
+                      this.setState({ unlisted: !this.state.unlisted });
                     }}
                   />
                 </Box>
