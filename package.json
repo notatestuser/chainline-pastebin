@@ -8,12 +8,15 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.14.0",
     "grommet": ">= 2.0.0-alpha.0 < 3.0.0",
     "grommet-icons": "^0.10.1",
     "next": "latest",
-    "react-dom": "^16.0.0",
+    "pastebin-js": "^0.5.1",
+    "pedantic-pick": "^0.2.1-4",
     "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "styled-components": "^2.2.2"
   },
   "devDependencies": {
