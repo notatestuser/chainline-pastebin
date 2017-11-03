@@ -54,7 +54,7 @@ class Layout extends Component {
         <Responsive onChange={this.onResponsiveChange}>
           <header>
             <Box
-              background={{ dark: true, image: '#69B8D6' }}
+              background={{ dark: true, image: '#916bd6' }}
               direction='row'
               justify='end'
               align='center'
