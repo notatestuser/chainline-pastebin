@@ -72,7 +72,7 @@ const onSubmit = async (comp) => {
     comp.setState({
       loading: false,
       notifySuccess: false,
-      notifyMessage: <Text>{err && err.message}</Text>,
+      notifyMessage: <Text>{(err && err.message) || 'Oops, an error occurred!'}</Text>,
     });
   }
 };

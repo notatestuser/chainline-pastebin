@@ -35,7 +35,7 @@ app
       } catch (err) {
         res.status(404).json({
           ok: false,
-          error: err && err.message,
+          error: `Oops, ${(err && err.message) || 'an error occurred'}.`,
         });
       }
     });
@@ -53,7 +53,7 @@ app
       } catch (err) {
         res.status(500).json({
           ok: false,
-          error: err && err.message,
+          error: `Oops, ${(err && err.message) || 'an error occurred'}.`,
         });
       }
     });
