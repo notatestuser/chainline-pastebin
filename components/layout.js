@@ -20,6 +20,7 @@ const PlainAnchor = styled.a`
 
 const BoldAnchor = styled(PlainAnchor)`
   font-weight: bold;
+  text-decoration: underline;
 `;
 
 class Layout extends Component {
@@ -99,7 +100,7 @@ class Layout extends Component {
         </Responsive>
 
         <main>
-          <Box pad='large' margin={{ bottom: 'large' }}>
+          <Box pad='large' margin={{ bottom: 'medium' }}>
             <WidthCappedContainer>
               { children }
             </WidthCappedContainer>

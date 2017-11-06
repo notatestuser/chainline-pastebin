@@ -3,9 +3,9 @@ import React from 'react';
 import { Layer, Box, Heading, Text, Button } from 'grommet';
 import { Validate, Alert } from 'grommet-icons';
 
-const NotifyLayer = ({ message, isSuccess, onClose }) => (
+const NotifyLayer = ({ message, isSuccess, onClose, size }) => (
   message ?
-    <Layer align='top' onEsc={onClose} size='large'>
+    <Layer align='top' onEsc={onClose} size={size || 'medium'}>
       <Box pad={{ horizontal: 'medium', top: 'medium' }}>
         <Heading level={2} margin='medium'>
           {isSuccess ?

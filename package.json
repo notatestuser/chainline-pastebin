@@ -18,6 +18,7 @@
     "pastebin-js": "^0.5.1",
     "pedantic-pick": "^0.2.1-4",
     "react": "^16.0.0",
+    "react-auto-form": "https://github.com/notatestuser/react-auto-form.git#enhancement/react-16-compiled",
     "react-dom": "^16.0.0",
     "ripemd160": "^2.0.1",
     "styled-components": "^2.2.2"

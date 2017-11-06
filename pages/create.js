@@ -19,7 +19,7 @@ const EXPIRY_OPTIONS = {
   '1 month': '1M',
 };
 
-const BorderlessTextarea = styled.textarea`
+export const BorderlessTextarea = styled.textarea`
   border: 0;
   font: inherit;
   padding: 16px 12px;
@@ -67,7 +67,7 @@ const onSubmit = async (comp) => {
           Use this link to share your paste:<br />
           <Box margin={{ top: 'small' }}>
             <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>
-              🡒 View: {id}
+              🡒 {id}
             </NonPaddedAnchor>
           </Box>
         </Text>),
