@@ -18,18 +18,16 @@ process.on('uncaughtException', (err) => {
   console.error('Uncaught exception', err);
 });
 
-app
-  .prepare()
+app.prepare()
   .then(() => {
     const server = express();
     server.use(bodyParser.json());
 
     // --- PAGES ---
 
-    server.get('/paste/:id/:hash', (req, res) => {
+    server.get('/paste/:id/:hash?', (req, res) => {
       const actualPage = '/view';
-      const { id, hash } = req.params;
-      app.render(req, res, actualPage, { id, hash });
+      app.render(req, res, actualPage, Object.assign({}, req.params, req.query));
     });
 
     // --- API ---
@@ -41,6 +39,9 @@ app
           throw new Error('The given id appears to be invalid');
         }
         const text = await pastebin.getPaste(id);
+        if (!text) {
+          throw new Error('no response from server');
+        }
         res.json({ ok: true, text });
       } catch (err) {
         res.status(404).json({

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 
 import styled from 'styled-components';
 import { Box, Heading, Text, Button, TextInput, Select, CheckBox, RadioButton, Anchor } from 'grommet';
@@ -65,8 +64,6 @@ const onSubmit = async (comp) => {
           <Heading level={3} margin={{ top: 'none' }}>
             Your paste has been created!
           </Heading>
-          Verify code:<br />
-          <TextInput plain={true} disabled={true} value={hash} />
           Use this link to share your paste:<br />
           <Box margin={{ top: 'small' }}>
             <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>

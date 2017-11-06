@@ -58,7 +58,7 @@ class Layout extends Component {
               direction='row'
               justify='end'
               align='center'
-              pad={{ vertical: 'none', horizontal: 'large' }}
+              pad={{ horizontal: 'large' }}
             >
               <WidthCappedContainer justify='space-between' direction='row'>
                 {responsiveState === 'wide' &&
