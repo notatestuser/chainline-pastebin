@@ -1,7 +1,9 @@
 const express = require('express');
 const next = require('next');
 const pick = require('pedantic-pick');
+const session = require('cookie-session');
 const bodyParser = require('body-parser');
+const svgCaptcha = require('svg-captcha');
 const PastebinAPI = require('pastebin-js');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -9,28 +11,52 @@ const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-if (!process.env.PASTEBIN_DEV_KEY) {
-  throw new Error('The environment variable PASTEBIN_DEV_KEY must be defined');
-}
-const pastebin = new PastebinAPI(process.env.PASTEBIN_DEV_KEY);
+['PASTEBIN_DEV_KEY', 'SESSION_SECRET'].forEach((key) => {
+  if (!process.env[key]) {
+    throw new Error(`The environment variable ${key} must be defined`);
+  }
+});
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught exception', err);
 });
 
+const pastebin = new PastebinAPI(process.env.PASTEBIN_DEV_KEY);
+
 app.prepare()
   .then(() => {
     const server = express();
-    server.use(bodyParser.json());
 
-    // --- PAGES ---
+    // == MIDDLEWARE ==
+
+    const sessionConfig = {
+      name: 'pastebin_session',
+      keys: [process.env.SESSION_SECRET],
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    };
+
+    if (server.get('env') === 'production') {
+      server.set('trust proxy', 1); // trust first proxy
+      sessionConfig.secure = true; // serve secure cookies
+    }
+
+    server.use(bodyParser.json());
+    server.use(session(sessionConfig));
+
+    // == PAGES ==
 
     server.get('/paste/:id/:hash?', (req, res) => {
       const actualPage = '/view';
       app.render(req, res, actualPage, Object.assign({}, req.params, req.query));
     });
 
-    // --- API ---
+    // == API ==
+
+    server.get('/captcha', (req, res) => {
+      const captcha = svgCaptcha.create();
+      req.session.captcha = captcha.text;
+      res.status(200).type('svg').end(captcha.data);
+    });
 
     server.get('/api/paste/:id', async (req, res) => {
       try {
@@ -54,8 +80,16 @@ app.prepare()
     server.post('/api/paste', async (req, res) => {
       try {
         const {
-          text, title, privacy, expiry,
-        } = pick(req.body, '!nes::title', '!nes::text', '!num::privacy', '!nes::expiry');
+          text, title, privacy, expiry, captcha,
+        } = pick(req.body, '!nes::title', '!nes::text', '!num::privacy', '!nes::expiry', '!nes::captcha');
+        if (captcha !== req.session.captcha) {
+          console.error('Invalid captcha response!', `Got: ${captcha}`, `Expected: ${req.session.captcha}`);
+          res.status(500).json({
+            ok: false,
+            error: 'Invalid captcha response!',
+          });
+          return;
+        }
         const url = await pastebin.createPaste({
           text, title, privacy, expiration: expiry, format: 'text',
         });

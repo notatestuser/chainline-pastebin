@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import AutoForm from 'react-auto-form';
 
 import styled from 'styled-components';
-import { Box, Heading, Text, Button, TextInput, Select, CheckBox, RadioButton, Anchor } from 'grommet';
+import { Box, Heading, Image, Text, Button, TextInput, Select, CheckBox, RadioButton, Anchor } from 'grommet';
 
 import Layout from '../components/layout';
 import Field from '../components/Field';
@@ -31,55 +32,13 @@ export const BorderlessTextarea = styled.textarea`
   }
 `;
 
+const CaptchaImage = styled(Image)`
+  max-width: 180px;
+`;
+
 const NonPaddedAnchor = styled(Anchor)`
   padding: 0;
 `;
-
-const onSubmit = async (comp) => {
-  const { selectedExpiry, expireNever, unlisted } = comp.state;
-
-  const form = document.forms['create-form'];
-  const inputs = form.getElementsByTagName('input');
-  const textareas = form.getElementsByTagName('textarea');
-  const [titleInput] = inputs;
-  const [contentTextArea] = textareas;
-  const title = titleInput.value;
-  const text = contentTextArea.value || contentTextArea.textContent;
-
-  const postBody = {
-    title,
-    text,
-    privacy: unlisted === true ? 1 : 0,
-    expiry: expireNever ? 'N' : EXPIRY_OPTIONS[selectedExpiry],
-  };
-
-  try {
-    const id = await createPaste(postBody);
-    const hash = getVerifyHash(text);
-    comp.setState({
-      loading: false,
-      notifySuccess: true,
-      notifyMessage: (
-        <Text>
-          <Heading level={3} margin={{ top: 'none' }}>
-            Your paste has been created!
-          </Heading>
-          Use this link to share your paste:<br />
-          <Box margin={{ top: 'small' }}>
-            <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>
-              🡒 {id}
-            </NonPaddedAnchor>
-          </Box>
-        </Text>),
-    });
-  } catch (err) {
-    comp.setState({
-      loading: false,
-      notifySuccess: false,
-      notifyMessage: <Text>{(err && err.message) || 'Oops, an error occurred!'}</Text>,
-    });
-  }
-};
 
 export default class CreateForm extends Component {
   state = {
@@ -90,8 +49,46 @@ export default class CreateForm extends Component {
     selectedExpiry: '1 day',
   }
 
+  _onSubmit = async ({ title, text, captcha }) => {
+    const { selectedExpiry, expireNever, unlisted } = this.state;
+    const postBody = {
+      title,
+      text,
+      privacy: unlisted === true ? 1 : 0,
+      expiry: expireNever ? 'N' : EXPIRY_OPTIONS[selectedExpiry],
+      captcha,
+    };
+    try {
+      const id = await createPaste(postBody);
+      const hash = getVerifyHash(text);
+      this.setState({
+        loading: false,
+        notifySuccess: true,
+        notifyMessage: (
+          <Text>
+            <Heading level={3} margin={{ top: 'none' }}>
+              Your paste has been created!
+            </Heading>
+            Use this link to share your paste:<br />
+            <Box margin={{ top: 'small' }}>
+              <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>
+                🡒 {id}
+              </NonPaddedAnchor>
+            </Box>
+          </Text>),
+      });
+    } catch (err) {
+      this.setState({
+        loading: false,
+        notifySuccess: false,
+        notifyMessage: <Text>{(err && err.message) || 'Oops, an error occurred!'}</Text>,
+      });
+    }
+  }
+
   render() {
     const { notifyMessage, notifySuccess, loading } = this.state;
+    const timezoneAbbr = new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
     return (
       <Layout>
         <NotifyLayer
@@ -99,12 +96,11 @@ export default class CreateForm extends Component {
           isSuccess={notifySuccess}
           onClose={() => { this.setState({ notifyMessage: null }); }}
         />
-        <form
-          name='create-form'
-          onSubmit={async (ev) => {
+        <AutoForm
+          onSubmit={(ev, data) => {
             ev.preventDefault();
             if (loading) return false;
-            onSubmit(this);
+            this._onSubmit(data);
             this.setState({ loading: true });
             return false;
           }}
@@ -115,10 +111,15 @@ export default class CreateForm extends Component {
             </Heading>
             <Box margin='none'>
               <Field label='Title'>
-                <TextInput plain={true} placeholder='e.g. My blockchain haiku' />
+                <TextInput
+                  name='title'
+                  placeholder='Enter a fitting title'
+                  defaultValue={`Paste at ${new Date().toLocaleString()} ${timezoneAbbr}`}
+                  plain={true}
+                />
               </Field>
               <Field label='Content'>
-                <BorderlessTextarea placeholder='Enter some text' />
+                <BorderlessTextarea name='text' placeholder='Enter some text' />
               </Field>
               <Field label='Expiry' direction='row'>
                 <Box margin='small' direction='row'>
@@ -171,6 +172,10 @@ export default class CreateForm extends Component {
                   />
                 </Box>
               </Field>
+              <Field label='Human check'>
+                <CaptchaImage src='/captcha' />
+                <TextInput name='captcha' plain={true} placeholder='Enter the text displayed above' />
+              </Field>
               <Box margin={{ top: 'large' }}>
                 <Button
                   type={loading ? 'disabled' : 'submit'}
@@ -181,7 +186,7 @@ export default class CreateForm extends Component {
               </Box>
             </Box>
           </Box>
-        </form>
+        </AutoForm>
       </Layout>
     );
   }

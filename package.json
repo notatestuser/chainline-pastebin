@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cookie-session": "^2.0.0-beta.3",
     "express": "^4.14.0",
     "grommet": ">= 2.0.0-alpha.0 < 3.0.0",
     "grommet-icons": "^0.10.1",
@@ -21,7 +22,8 @@
     "react-auto-form": "https://github.com/notatestuser/react-auto-form.git#enhancement/react-16-compiled",
     "react-dom": "^16.0.0",
     "ripemd160": "^2.0.1",
-    "styled-components": "^2.2.2"
+    "styled-components": "^2.2.2",
+    "svg-captcha": "^1.3.11"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

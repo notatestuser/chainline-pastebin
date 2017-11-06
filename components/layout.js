@@ -117,7 +117,7 @@ class Layout extends Component {
             <Box
               direction='row'
               align='start'
-              pad={{ horizontal: 'none', vertical: 'medium' }}
+              pad={{ vertical: 'medium' }}
               justify='between'
               margin={{ horizontal: 'large' }}
             >
