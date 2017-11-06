@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import fetch from 'isomorphic-unfetch';
 import Error from 'next/error';
+import is from 'is';
 
 import styled from 'styled-components';
 import { Box, Heading, Text } from 'grommet';
@@ -23,6 +24,12 @@ const AlertBox = styled(Box)`
 
   & span {
     padding-left: 20px;
+  }
+
+  & a {
+    cursor: pointer;
+    margin-left: 10px;
+    text-decoration: underline;
   }
 
   & svg {
@@ -59,14 +66,38 @@ export default class ViewPage extends Component {
     }
   }
 
+  state = {
+    // these are filled when the check is optionally performed on the client-side
+    hash: null,
+    match: null,
+  }
+
+  _verifyAgain = () => {
+    const { text, hash } = this.props;
+    const thisHash = getVerifyHash(text);
+    console.log('Generated client-side hash', thisHash);
+    this.setState({ hash, match: thisHash === hash }, () => {
+      alert('Client-side check finished. Result updated.');
+    });
+  }
+
   render() {
     if (this.props.statusCode) {
       return <Error statusCode={this.props.statusCode} />;
     }
 
-    const { text, hash, match } = this.props;
+    // server (props) or client (state)
+    const hash = is.string(this.state.hash) ? this.state.hash : this.props.hash;
+    const match = is.boolean(this.state.match) ? this.state.match : this.props.match;
+    const { text } = this.props;
 
     let alert = null;
+    const runClientSideLink = !is.boolean(this.state.match) ? (
+      <a onClick={() => { this._verifyAgain() }} role='button' tabIndex='0'>
+        Run client-side
+      </a>
+    ) : null;
+
     if (!hash) {
       alert = (
         <AlertBox background={{ dark: false, image: '#FFD602' }} direction='row'>
@@ -88,6 +119,7 @@ export default class ViewPage extends Component {
             <Text>
               The hash provided in the URL does not match the content.
               Be careful and exercise caution.
+              {runClientSideLink}
             </Text>
           </Box>
         </AlertBox>);
@@ -99,6 +131,7 @@ export default class ViewPage extends Component {
             <Heading level={3}>Verification passed</Heading>
             <Text>
               All good. The integrity of the content shown below was verified.
+              {runClientSideLink}
             </Text>
           </Box>
         </AlertBox>);

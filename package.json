@@ -12,6 +12,7 @@
     "express": "^4.14.0",
     "grommet": ">= 2.0.0-alpha.0 < 3.0.0",
     "grommet-icons": "^0.10.1",
+    "is": "^3.2.1",
     "isomorphic-unfetch": "^2.0.0",
     "next": "latest",
     "pastebin-js": "^0.5.1",
