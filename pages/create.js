@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import Link from 'next/link';
 
 import styled from 'styled-components';
-import { Box, Heading, Text, Button, TextInput, Select, CheckBox, RadioButton, RoutedAnchor } from 'grommet';
+import { Box, Heading, Text, Button, TextInput, Select, CheckBox, RadioButton, Anchor } from 'grommet';
 
 import Layout from '../components/layout';
 import Field from '../components/Field';
@@ -29,6 +30,10 @@ const BorderlessTextarea = styled.textarea`
   &::placeholder {
     color: #aaa;
   }
+`;
+
+const NonPaddedAnchor = styled(Anchor)`
+  padding: 0;
 `;
 
 const onSubmit = async (comp) => {
@@ -64,7 +69,9 @@ const onSubmit = async (comp) => {
           <TextInput plain={true} disabled={true} value={hash} />
           Use this link to share your paste:<br />
           <Box margin={{ top: 'small' }}>
-            <RoutedAnchor primary={true} path={`/paste/${id}`} label={id} />
+            <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>
+              🡒 View: {id}
+            </NonPaddedAnchor>
           </Box>
         </Text>),
     });
@@ -77,7 +84,7 @@ const onSubmit = async (comp) => {
   }
 };
 
-class CreateForm extends Component {
+export default class CreateForm extends Component {
   state = {
     loading: false,
     unlisted: true,
@@ -182,5 +189,3 @@ class CreateForm extends Component {
     );
   }
 }
-
-export default CreateForm;

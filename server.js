@@ -24,6 +24,16 @@ app
     const server = express();
     server.use(bodyParser.json());
 
+    // --- PAGES ---
+
+    server.get('/paste/:id/:hash', (req, res) => {
+      const actualPage = '/view';
+      const { id, hash } = req.params;
+      app.render(req, res, actualPage, { id, hash });
+    });
+
+    // --- API ---
+
     server.get('/api/paste/:id', async (req, res) => {
       try {
         const { id } = pick(req.params, '!nempstring::id');
