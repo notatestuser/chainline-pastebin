@@ -9,6 +9,8 @@ import { Grommet, Responsive, Box, Heading, Text, Anchor } from 'grommet';
 
 import { WidthCappedContainer } from './WidthCappedContainer';
 
+import { version } from '../package.json';
+
 const FlexNav = styled.nav`
   display: flex;
 `;
@@ -46,7 +48,7 @@ class Layout extends Component {
 
     return ([
       <Head key='Head'>
-        <title>{ title || 'Chain Line Pastebin' }</title>
+        <title>{ title || 'Immutable Pastebin' }</title>
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
         <meta name='mobile-web-app-capable' content='yes' />
@@ -132,6 +134,8 @@ class Layout extends Component {
                 </Text>
                 {responsiveState === 'wide' ? (
                   <Text margin='none'>
+                    v{version}&nbsp;
+                    &nbsp;
                     <UnderlinedAnchor href='https://github.com/notatestuser/chainline-pastebin' target='_blank'>
                       Source Code
                     </UnderlinedAnchor>
