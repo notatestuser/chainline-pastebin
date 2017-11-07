@@ -43,6 +43,7 @@ const AlertBox = styled(Box)`
 
 const Pre = styled.pre`
   font-size: 16px;
+  white-space: pre-line;
 `;
 
 export default class ViewPage extends Component {
