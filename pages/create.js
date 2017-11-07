@@ -90,7 +90,7 @@ export default class CreateForm extends Component {
     const { notifyMessage, notifySuccess, loading } = this.state;
     const timezoneAbbr = new Date().toString().match(/\(([A-Za-z\s].*)\)/)[1];
     return (
-      <Layout>
+      <Layout title='Create Paste'>
         <NotifyLayer
           message={notifyMessage}
           isSuccess={notifySuccess}
@@ -120,7 +120,7 @@ export default class CreateForm extends Component {
                 />
               </Field>
               <Field label='Content'>
-                <BorderlessTextarea name='text' placeholder='Enter some text' />
+                <BorderlessTextarea name='text' placeholder='The content of your paste goes here' />
               </Field>
               <Field label='Expiry' direction='row'>
                 <Box margin='small' direction='row'>
