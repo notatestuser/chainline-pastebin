@@ -72,7 +72,7 @@ export default class CreateForm extends Component {
             Use this link to share your paste:<br />
             <Box margin={{ top: 'small' }}>
               <NonPaddedAnchor primary={true} href={`/p/${id}/${hash}`}>
-                🡒 {id}
+                ➔ {id}
               </NonPaddedAnchor>
             </Box>
           </Text>),
@@ -104,6 +104,7 @@ export default class CreateForm extends Component {
             this.setState({ loading: true });
             return false;
           }}
+          trimOnSubmit
         >
           <Box>
             <Heading level={2} margin={{ top: 'none' }}>
