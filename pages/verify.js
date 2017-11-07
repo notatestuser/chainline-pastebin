@@ -92,11 +92,11 @@ export default class VerifyPage extends Component {
         <AutoForm onChange={this._onChange} onSubmit={this._onSubmit}>
           <Box>
             <Heading level={2} margin={{ top: 'none' }}>
-              Verify your paste
+              Verify an existing paste
             </Heading>
             <Box margin='none'>
               <Field label='URL'>
-                <TextInput name='url' placeholder='Enter the URL of the paste' plain={true} />
+                <TextInput name='url' placeholder='Enter the URL of the paste, e.g. https://pastebin.chainline.co/p/...' plain={true} />
               </Field>
               <Paragraph>
                 <strong>OR</strong>
