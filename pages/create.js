@@ -71,7 +71,7 @@ export default class CreateForm extends Component {
             </Heading>
             Use this link to share your paste:<br />
             <Box margin={{ top: 'small' }}>
-              <NonPaddedAnchor primary={true} href={`/paste/${id}/${hash}`}>
+              <NonPaddedAnchor primary={true} href={`/p/${id}/${hash}`}>
                 🡒 {id}
               </NonPaddedAnchor>
             </Box>

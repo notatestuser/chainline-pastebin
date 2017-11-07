@@ -45,7 +45,7 @@ app.prepare()
 
     // == PAGES ==
 
-    server.get('/paste/:id/:hash?', (req, res) => {
+    server.get('/p(aste)?/:id/:hash?', (req, res) => {
       const actualPage = '/view';
       app.render(req, res, actualPage, Object.assign({}, req.params, req.query));
     });
