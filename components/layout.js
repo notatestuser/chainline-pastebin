@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import styled from 'styled-components';
 import { AddCircle, FingerPrint } from 'grommet-icons';
-import { Grommet, Responsive, Box, Heading, Text } from 'grommet';
+import { Grommet, Responsive, Box, Heading, Text, Anchor } from 'grommet';
 
 import { WidthCappedContainer } from './WidthCappedContainer';
 
@@ -16,6 +16,10 @@ const FlexNav = styled.nav`
 const PlainAnchor = styled.a`
   cursor: pointer;
   text-decoration: none;
+`;
+
+const UnderlinedAnchor = styled(Anchor)`
+  text-decoration: underline;
 `;
 
 const BoldAnchor = styled(PlainAnchor)`
@@ -126,6 +130,12 @@ class Layout extends Component {
                   © 2017 Luke Plaster.&nbsp;
                   MIT Licensed.
                 </Text>
+                {responsiveState === 'wide' ? (
+                  <Text margin='none'>
+                    <UnderlinedAnchor href='https://github.com/notatestuser/chainline-pastebin' target='_blank'>
+                      Source Code
+                    </UnderlinedAnchor>
+                  </Text>) : null}
               </WidthCappedContainer>
             </Box>
           </Box>
