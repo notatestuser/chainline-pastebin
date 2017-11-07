@@ -67,7 +67,7 @@ class Layout extends Component {
               align='center'
               pad={{ horizontal: 'large' }}
             >
-              <WidthCappedContainer justify='space-between' direction='row'>
+              <WidthCappedContainer justify={responsiveState === 'wide' ? 'space-between' : 'center'} direction='row'>
                 {responsiveState === 'wide' &&
                 <Heading>
                   <Link href='/'>
