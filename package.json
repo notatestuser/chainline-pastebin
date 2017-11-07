@@ -4,9 +4,17 @@
   "version": "1.0.1",
   "scripts": {
     "dev": "node server.js",
-    "build": "next build",
+    "build": "rm -rf .next && next build",
     "start": "node server.js",
-    "deploy": "now -e PASTEBIN_DEV_KEY=@pastebin-dev-key -e SESSION_SECRET=@pastebin-session-key"
+    "deploy": "now && now alias"
+  },
+  "now": {
+    "alias": "pastebin.chainline.co",
+    "env": {
+      "NODE_ENV": "production",
+      "PASTEBIN_DEV_KEY": "@pastebin-dev-key",
+      "SESSION_SECRET": "@pastebin-session-key"
+    }
   },
   "dependencies": {
     "body-parser": "^1.18.2",
