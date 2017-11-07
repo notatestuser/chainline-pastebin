@@ -1,7 +1,7 @@
 {
   "name": "chainline-pastebin",
   "description": "A pastebin that hashes and verifies uploaded content",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
