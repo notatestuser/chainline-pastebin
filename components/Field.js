@@ -1,6 +1,11 @@
 import React from 'react';
 
+import styled from 'styled-components';
 import { Box, Text } from 'grommet';
+
+const Label = styled(Text)`
+  font-weight: 500;
+`;
 
 const Field = ({
   children,
@@ -16,7 +21,7 @@ const Field = ({
         justify='between'
         pad={{ horizontal: 'none', top: 'xsmall' }}
       >
-        <Text>{label}</Text>
+        <Label>{label}</Label>
         <Text color={error ? 'status-critical' : 'dark-5'}>{error || help}</Text>
       </Box>
     );
