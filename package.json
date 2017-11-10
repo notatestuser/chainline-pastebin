@@ -2,10 +2,10 @@
   "name": "chainline-pastebin",
   "description": "A pastebin that hashes and verifies uploaded content",
   "repository": "https://github.com/notatestuser/chainline-pastebin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "dev": "node server.js",
-    "build": "rm -rf .next && next build",
+    "build": "next build",
     "start": "node server.js",
     "deploy": "now",
     "deploy-prod": "now && now alias"

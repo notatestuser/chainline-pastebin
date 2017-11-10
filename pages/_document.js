@@ -15,7 +15,13 @@ export default class MyDocument extends Document {
     return (
       <html lang='en'>
         <Head>
-          <title>My page</title>
+          <meta charSet='utf-8' />
+          <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+          <meta name='mobile-web-app-capable' content='yes' />
+          <style>
+            {'html, body, #content { height: 100%; }'}
+            {'body { margin: 0; background: #444444; }'}
+          </style>
           {this.props.styleTags}
         </Head>
         <body>

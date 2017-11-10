@@ -64,13 +64,6 @@ class Layout extends Component {
     return ([
       <Head key='Head'>
         <title>{ title || 'Immutable Pastebin' }</title>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='initial-scale=1.0, width=device-width' />
-        <meta name='mobile-web-app-capable' content='yes' />
-        <style>
-          {'html, body, #content { height: 100%; }'}
-          {'body { margin: 0; background: #444444; }'}
-        </style>
       </Head>,
       <Grommet key='Grommet'>
         <Responsive onChange={this.onResponsiveChange}>
