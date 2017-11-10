@@ -78,7 +78,6 @@ app.prepare()
           text, title, privacy, expiry, captcha,
         } = pick(req.body, '!nes::title', '!nes::text', '!num::privacy', '!nes::expiry', '!nes::captcha');
         if (captcha !== req.session.captcha) {
-          console.error('Invalid captcha response!', `Got: ${captcha}`, `Expected: ${req.session.captcha}`);
           res.status(500).json({
             ok: false,
             error: 'Invalid captcha response!',
