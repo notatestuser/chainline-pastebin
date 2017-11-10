@@ -1,12 +1,14 @@
 {
   "name": "chainline-pastebin",
   "description": "A pastebin that hashes and verifies uploaded content",
+  "repository": "https://github.com/notatestuser/chainline-pastebin",
   "version": "1.0.3",
   "scripts": {
     "dev": "node server.js",
     "build": "rm -rf .next && next build",
     "start": "node server.js",
-    "deploy": "now && now alias"
+    "deploy": "now",
+    "deploy-prod": "now && now alias"
   },
   "now": {
     "alias": "pastebin.chainline.co",
@@ -14,7 +16,8 @@
       "NODE_ENV": "production",
       "PASTEBIN_DEV_KEY": "@pastebin-dev-key",
       "SESSION_SECRET": "@pastebin-session-key"
-    }
+    },
+    "public": true
   },
   "dependencies": {
     "body-parser": "^1.18.2",

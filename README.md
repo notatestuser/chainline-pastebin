@@ -8,5 +8,4 @@ A pastebin that hashes and verifies uploaded content.
 ## Deploying
 Deployed using [`now`](https://zeit.co/now). Define the secrets (see `package.json`) and run `yarn deploy`.
 
-You can remove the `alias` setting to deploy to an auto-generated domain.
-
+To deploy to the production site, if you are authorized to do so, run `yarn deploy-prod`.
