@@ -5,6 +5,7 @@ const session = require('cookie-session');
 const bodyParser = require('body-parser');
 const svgCaptcha = require('svg-captcha');
 const PastebinAPI = require('pastebin-js');
+const { name } = require('./package.json');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -52,12 +53,6 @@ app.prepare()
 
     // == API ==
 
-    server.get('/captcha', (req, res) => {
-      const captcha = svgCaptcha.create();
-      req.session.captcha = captcha.text;
-      res.status(200).type('svg').end(captcha.data);
-    });
-
     server.get('/api/paste/:id', async (req, res) => {
       try {
         const { id } = pick(req.params, '!nempstring::id');
@@ -101,6 +96,22 @@ app.prepare()
           error: `Oops, ${(err && err.message) || 'an error occurred'}.`,
         });
       }
+    });
+
+    server.get('/code-url', (req, res) => {
+      const [, appId] = process.env.NOW_URL.match(/([a-z0-9]+)\.now/);
+      if (appId) {
+        const sourceCodeUrl = `//${name}-${appId}.now.sh/_src`;
+        res.json(sourceCodeUrl);
+      } else {
+        res.json(null);
+      }
+    });
+
+    server.get('/captcha', (req, res) => {
+      const captcha = svgCaptcha.create();
+      req.session.captcha = captcha.text;
+      res.status(200).type('svg').end(captcha.data);
     });
 
     server.get('*', (req, res) => handle(req, res));

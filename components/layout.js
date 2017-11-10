@@ -9,7 +9,7 @@ import { Grommet, Responsive, Box, Heading, Text, Anchor } from 'grommet';
 
 import { WidthCappedContainer } from './WidthCappedContainer';
 
-import { version } from '../package.json';
+import { name, version, repository } from '../package.json';
 
 const FlexNav = styled.nav`
   display: flex;
@@ -32,6 +32,22 @@ const BoldAnchor = styled(PlainAnchor)`
 class Layout extends Component {
   state = {
     responsiveState: 'wide',
+    sourceCodeUrl: repository,
+  }
+
+  async componentWillMount() {
+    if (this.state.sourceCodeUrl !== repository) return;
+    let sourceCodeUrl;
+    // rendering server-side?
+    if (process && process.env.NOW_URL) {
+      const [, appId] = process.env.NOW_URL.match(/([a-z0-9]+)\.now/);
+      sourceCodeUrl = `//${name}-${appId}.now.sh/_src`;
+    } else {
+      const res = await fetch('/code-url');
+      sourceCodeUrl = await res.json();
+    }
+    if (!sourceCodeUrl) return;
+    this.setState({ sourceCodeUrl });
   }
 
   componentDidMount() {
@@ -44,8 +60,7 @@ class Layout extends Component {
 
   render() {
     const { title, children } = this.props;
-    const { responsiveState } = this.state;
-
+    const { responsiveState, sourceCodeUrl } = this.state;
     return ([
       <Head key='Head'>
         <title>{ title || 'Immutable Pastebin' }</title>
@@ -136,7 +151,7 @@ class Layout extends Component {
                   <Text margin='none'>
                     v{version}&nbsp;
                     &nbsp;
-                    <UnderlinedAnchor href='https://github.com/notatestuser/chainline-pastebin' target='_blank'>
+                    <UnderlinedAnchor href={sourceCodeUrl} target='_blank'>
                       Source Code
                     </UnderlinedAnchor>
                   </Text>) : null}
