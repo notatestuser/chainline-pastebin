@@ -9,7 +9,7 @@ import { Grommet, Responsive, Box, Heading, Text, Anchor } from 'grommet';
 
 import { WidthCappedContainer } from './WidthCappedContainer';
 
-import { name, version, repository } from '../package.json';
+import { name, repository } from '../package.json';
 
 const FlexNav = styled.nav`
   display: flex;
@@ -65,11 +65,11 @@ class Layout extends Component {
       <Head key='Head'>
         <title>{ title || 'Immutable Pastebin' }</title>
       </Head>,
-      <Grommet key='Grommet'>
+      <Grommet key='Grommet' theme={{ global: { colors: { brand: '#69B8D6' } } }}>
         <Responsive onChange={this.onResponsiveChange}>
           <header>
             <Box
-              background={{ dark: true, image: '#916bd6' }}
+              background={{ dark: true, image: '#69B8D6' }}
               direction='row'
               justify='end'
               align='center'
@@ -142,8 +142,6 @@ class Layout extends Component {
                 </Text>
                 {responsiveState === 'wide' ? (
                   <Text margin='none'>
-                    v{version}&nbsp;
-                    &nbsp;
                     <UnderlinedAnchor href={sourceCodeUrl} target='_blank'>
                       Source Code
                     </UnderlinedAnchor>
